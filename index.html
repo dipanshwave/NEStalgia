@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2a2b2f">
+<title>NEStalgia</title>
+<meta name="description" content="Play NES games in your browser. Slide a cartridge into the console and watch the TV tune in.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%232a2b2f'/%3E%3Crect x='8' y='5' width='16' height='20' rx='3' fill='%23f5b800'/%3E%3Crect x='11' y='9' width='10' height='7' rx='1' fill='%23f1ead8'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500&family=IBM+Plex+Mono:wght@400;500&family=Press+Start+2P&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+
+<header class="top">
+  <h1 class="logo" aria-label="NEStalgia">
+    <svg class="logo-cart" viewBox="0 0 14 16" width="42" height="48" shape-rendering="crispEdges" aria-hidden="true">
+      <g class="lc-body"><rect x="1" y="0" width="12" height="13" fill="#f5b800"/><rect x="0" y="2" width="1" height="11" fill="#c99400"/><rect x="13" y="2" width="1" height="11" fill="#c99400"/>
+      <rect x="3" y="2" width="8" height="6" fill="#f1ead8"/><rect x="4" y="3" width="2" height="2" fill="#2a2b2f"/><rect x="7" y="3" width="3" height="1" fill="#2a2b2f"/><rect x="7" y="5" width="2" height="1" fill="#2a2b2f"/>
+      <rect x="3" y="10" width="8" height="1" fill="#c99400"/><rect x="2" y="13" width="10" height="2" fill="#2a2b2f"/>
+      <rect x="3" y="14" width="1" height="2" fill="#b4b6b0"/><rect x="5" y="14" width="1" height="2" fill="#b4b6b0"/><rect x="8" y="14" width="1" height="2" fill="#b4b6b0"/><rect x="10" y="14" width="1" height="2" fill="#b4b6b0"/></g>
+    </svg>
+    <span class="logo-word"><span class="l nes" style="--i:0" aria-hidden="true">N</span><span class="l nes" style="--i:1" aria-hidden="true">E</span><span class="l nes" style="--i:2" aria-hidden="true">S</span><span class="l tal" style="--i:3" aria-hidden="true">t</span><span class="l tal" style="--i:4" aria-hidden="true">a</span><span class="l tal" style="--i:5" aria-hidden="true">l</span><span class="l tal" style="--i:6" aria-hidden="true">g</span><span class="l tal" style="--i:7" aria-hidden="true">i</span><span class="l tal" style="--i:8" aria-hidden="true">a</span></span>
+    <svg class="spark s1" viewBox="0 0 5 5" width="14" height="14" shape-rendering="crispEdges" aria-hidden="true"><path d="M2 0h1v2h2v1H3v2H2V3H0V2h2z" fill="#f5b800"/></svg>
+    <svg class="spark s2" viewBox="0 0 5 5" width="10" height="10" shape-rendering="crispEdges" aria-hidden="true"><path d="M2 0h1v2h2v1H3v2H2V3H0V2h2z" fill="#f5b800"/></svg>
+  </h1>
+  <p class="tag">Pick a cartridge, slide it in, play. Bring your own ROMs.</p>
+</header>
+
+<div class="topbar">
+  <p class="made">Made with <span class="heart" role="img" aria-label="love">&#9829;</span> by Dipansh</p>
+  <a class="coffee" href="https://www.buymeacoffee.com/" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8zm13 1h1.5a2.5 2.5 0 0 1 0 5H17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 2v3M12 2v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    Buy me a coffee</a>
+</div>
+
+
+<main class="scene">
+
+  <section class="tv-col" aria-label="Television">
+    <div class="tv" id="tv" data-mode="static" data-filter="normal">
+      <div class="bezel">
+        <div class="glass" id="glass">
+          <canvas id="screen" width="256" height="240" aria-label="Game screen"></canvas>
+          <canvas id="noise" width="160" height="120" aria-hidden="true"></canvas>
+          <div class="crt" aria-hidden="true"></div>
+          <div class="osd" id="osd" aria-hidden="true"></div>
+        </div>
+      </div>
+      <div class="tv-side" aria-hidden="true">
+        <div class="knob"></div>
+        <div class="knob small"></div>
+        <div class="speaker"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="plate">NEStalgia</div>
+      </div>
+    </div>
+
+    <div class="strip">
+      <div class="now"><small>Now playing</small><strong id="now">No cartridge</strong></div>
+      <div class="actions">
+        <button class="btn" id="ejectTv" type="button" disabled>Eject</button>
+        <button class="btn" id="pause" type="button" disabled>Pause</button>
+        <button class="btn" id="save" type="button" disabled>Save state</button>
+        <button class="btn" id="restore" type="button" disabled>Load state</button>
+        <button class="btn" id="filter" type="button" aria-label="Change the screen filter">Filter: Normal</button>
+        <button class="btn" id="full" type="button">Fullscreen</button>
+      </div>
+      <div class="vol">
+        <button class="btn" id="mute" type="button" aria-pressed="false">Mute</button>
+        <label for="vol">Volume</label>
+        <input id="vol" type="range" min="0" max="100" value="60">
+      </div>
+    </div>
+    <p class="status" id="status" role="status" aria-live="polite">No cartridge in the console. Pick one from the shelf, or load a .nes file.</p>
+  </section>
+
+  <section class="rig" id="rig" aria-label="Console and cartridges">
+    <div class="shelf-wrap">
+      <div class="shelf-head">
+        <h2 class="shelf-title">Cartridge shelf</h2>
+      </div>
+      <div class="shelf" id="shelf">
+        <div class="slot" id="addSlot">
+          <div class="bed">
+            <button class="cart blank" id="addCart" type="button" aria-label="Load a ROM file">
+              <span class="plus" aria-hidden="true">+</span>
+              <span class="blank-t">Load ROM</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="deck" id="deck">
+      <div class="bay" id="bay">
+        <span class="bay-slot" aria-hidden="true"></span>
+        <div class="holder" id="holder"></div>
+        <div class="bay-plate" aria-hidden="true"><span>Cartridge</span></div>
+      </div>
+      <div class="body">
+        <div class="lid" aria-hidden="true"></div>
+        <div class="face">
+          <div class="pwr"><span class="led" id="led" aria-hidden="true"></span><span class="mono-lab">Power</span></div>
+          <div class="vents" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+          <div class="hws">
+            <button class="hw" id="btnReset" type="button" disabled>Reset</button>
+            <button class="hw" id="btnEject" type="button" disabled>Eject</button>
+          </div>
+        </div>
+        <div class="ports" aria-hidden="true">
+          <span class="port"><i></i><i></i><i></i><i></i></span>
+          <span class="port"><i></i><i></i><i></i><i></i></span>
+          <span class="mono-lab">Controller ports</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pad-wrap" data-sys="">
+      <svg id="pad" viewBox="0 18 420 168" role="group" aria-label="On-screen controller. Press and hold the buttons to play.">
+        <rect x="8" y="28" width="404" height="150" rx="12" fill="var(--ind)"/>
+        <rect x="9" y="29" width="402" height="148" rx="11" fill="none" stroke="var(--ind-lt)" stroke-width="2"/>
+
+        <circle cx="104" cy="103" r="56" fill="var(--ind-dk)"/>
+        <circle cx="104" cy="103" r="48" fill="var(--bone)"/>
+        <path class="arrow" d="M104 70L95 86H113Z"/>
+        <path class="arrow" d="M104 136L95 120H113Z"/>
+        <path class="arrow" d="M71 103L87 94V112Z"/>
+        <path class="arrow" d="M137 103L121 94V112Z"/>
+        <circle cx="104" cy="103" r="9" fill="var(--bone-dk)"/>
+        <g id="dpad">
+          <path data-btn="UP" d="M104 103L64.4 63.4A56 56 0 0 1 143.6 63.4Z"/>
+          <path data-btn="DOWN" d="M104 103L143.6 142.6A56 56 0 0 1 64.4 142.6Z"/>
+          <path data-btn="LEFT" d="M104 103L64.4 142.6A56 56 0 0 1 64.4 63.4Z"/>
+          <path data-btn="RIGHT" d="M104 103L143.6 63.4A56 56 0 0 1 143.6 142.6Z"/>
+        </g>
+
+        <text class="brand" x="210" y="76" text-anchor="middle">NEStalgia</text>
+        <rect x="172" y="88" width="76" height="4" rx="2" fill="var(--red)"/>
+
+        <g data-hit="SELECT">
+          <rect x="146" y="112" width="64" height="48" fill="transparent"/>
+          <rect class="pill" data-btn="SELECT" x="160" y="122" width="36" height="12" rx="6"/>
+          <text class="nm" x="178" y="150" text-anchor="middle">Select</text>
+          <text class="kh" id="kh-SELECT" x="178" y="165" text-anchor="middle"></text>
+        </g>
+        <g data-hit="START">
+          <rect x="212" y="112" width="64" height="48" fill="transparent"/>
+          <rect class="pill" data-btn="START" x="226" y="122" width="36" height="12" rx="6"/>
+          <text class="nm" x="244" y="150" text-anchor="middle">Start</text>
+          <text class="kh" id="kh-START" x="244" y="165" text-anchor="middle"></text>
+        </g>
+
+        <g transform="rotate(-18 323 104)">
+          <rect class="plate" x="266" y="78" width="114" height="52" rx="26"/>
+        <g data-hit="A">
+          <circle cx="350" cy="104" r="27" fill="transparent"/>
+          <circle class="round a" data-btn="A" cx="350" cy="104" r="18"/>
+          <text class="bl" x="350" y="104" text-anchor="middle" dominant-baseline="central">A</text>
+        </g>
+        <g data-hit="B">
+          <circle cx="296" cy="104" r="27" fill="transparent"/>
+          <circle class="round b" data-btn="B" cx="296" cy="104" r="18"/>
+          <text class="bl" x="296" y="104" text-anchor="middle" dominant-baseline="central">B</text>
+        </g>
+        </g>
+      </svg>
+      <div class="pad-tools">
+        <button class="btn" id="custom" type="button" aria-pressed="false">Customize keys</button>
+        <span class="hint">Remap the keyboard controls.</span>
+      </div>
+      <div class="map" id="map" hidden>
+        <p class="map-help" id="mapHelp">Click a button on the controller or in this list, then press the key you want. Esc cancels.</p>
+        <div class="map-actions"><button class="btn" id="mapReset" type="button">Reset to defaults</button></div>
+      </div>
+      <dl class="keys" id="keys"></dl>
+    </div>
+
+    <div class="fly" id="fly" aria-hidden="true"></div>
+  </section>
+</main>
+
+<footer class="foot">
+  <p>Your ROMs are read and stored inside this browser only and are never uploaded. NEStalgia ships with no games, so load only files you have the right to use, such as homebrew or dumps of cartridges you own.</p>
+  <p>Games run on <a href="https://github.com/bfirsh/jsnes" target="_blank" rel="noopener">jsnes</a>. Some games use mappers the emulator does not support and will not start.</p>
+  <p class="support"><strong>Support and contact:</strong> <a href="mailto:dipanshshahare557@gmail.com">dipanshshahare557@gmail.com</a></p>
+</footer>
+
+<input id="file" type="file" accept=".nes" hidden>
+
+<script src="https://cdn.jsdelivr.net/npm/jsnes@1.2.1/dist/jsnes.min.js"></script>
+<script>window.jsnes || document.write('<script src="vendor/jsnes.min.js"><\/script>');</script>
+<script src="js/main.js"></script>
+</body>
+</html>
