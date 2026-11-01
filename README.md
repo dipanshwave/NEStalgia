@@ -2,6 +2,9 @@
 
 **Play NES games in your browser, living-room style.**
 
+<img width="1270" height="856" alt="image" src="https://github.com/user-attachments/assets/70572cb9-f3c1-4f55-9c26-71b7d1c73b4f" />
+
+
 **Live site: <https://dipanshwave.github.io/NEStalgia/>**
 
 Pick a cartridge from the shelf, watch it slide into the console, and the CRT TV tunes in from static to your game. Play with the keyboard, a gamepad, or touch controls on your phone. Bring your own ROMs.
